@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Оплата</title>
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, sans-serif;
+            background: var(--tg-theme-bg-color, #1a1a2e);
+            color: var(--tg-theme-text-color, #fff);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        h1 { font-size: 20px; margin-bottom: 20px; }
+        #reader {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 16px;
+            background: var(--tg-theme-secondary-bg-color, #16213e);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            word-break: break-all;
+            display: none;
+        }
+        .btn {
+            margin-top: 16px;
+            padding: 14px 28px;
+            background: var(--tg-theme-button-color, #0f3460);
+            color: var(--tg-theme-button-text-color, #fff);
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 400px;
+        }
+        .status { margin-top: 12px; font-size: 14px; opacity: 0.7; }
+    </style>
+</head>
+<body>
+    <h1>📷 Сканировать QR код</h1>
+    <div id="reader"></div>
+    <div id="result"></div>
+    <button class="btn" id="sendBtn" style="display:none;">Отправить на оплату</button>
+    <p class="status" id="status">Наведите камеру на QR код</p>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+
+        let scannedData = null;
+
+        const scanner = new Html5Qrcode("reader");
+        scanner.start(
+            { facingMode: "environment" },
+            { fps: 10, qrbox: { width: 250, height: 250 } },
+            onScanSuccess,
+            onScanFailure
+        );
+
+        function onScanSuccess(decoded) {
+            scannedData = decoded;
+            scanner.stop();
+            document.getElementById("result").style.display = "block";
+            document.getElementById("result").textContent = "Ссылка: " + decoded;
+            document.getElementById("sendBtn").style.display = "block";
+            document.getElementById("status").textContent = "QR код распознан ✓";
+        }
+
+        function onScanFailure(error) {
+            // тихо игнорим
+        }
+
+        document.getElementById("sendBtn").addEventListener("click", () => {
+            tg.sendData(JSON.stringify({ qr_link: scannedData }));
+        });
+    </script>
+</body>
+</html>
