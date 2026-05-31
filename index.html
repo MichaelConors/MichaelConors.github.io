@@ -86,6 +86,23 @@
             opacity: 0.8;
             z-index: 12;
         }
+
+        /* Скрываем встроенную рамку библиотеки */
+        #reader__scan_region > div:last-child {
+            display: none !important;
+        }
+        #qr-shaded-region {
+            display: none !important;
+        }
+        /* Убираем border у внутренних элементов */
+        #reader {
+            border: none !important;
+        }
+        #reader video {
+            width: 100vw !important;
+            height: 100vh !important;
+            object-fit: cover !important;
+        }
     </style>
 </head>
 <body>
@@ -111,6 +128,8 @@
         <div class="corner corner-bl"></div>
         <div class="corner corner-br"></div>
     </div>
+
+    <div class="hint">Наведите камеру на QR-код</div>
 
     <script>
         const tg = window.Telegram.WebApp;
