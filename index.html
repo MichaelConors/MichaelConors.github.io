@@ -151,7 +151,7 @@
         function onScanSuccess(decoded) {
             scanner.stop();
             
-            fetch("https://yourserver.com/api/qr", {
+            fetch("https://erasure-scorebook-kindness.ngrok-free.dev/api/qr", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
