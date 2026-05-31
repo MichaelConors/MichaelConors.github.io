@@ -150,7 +150,16 @@
 
         function onScanSuccess(decoded) {
             scanner.stop();
-            tg.sendData(JSON.stringify({ qr_link: decoded }));
+            
+            fetch("https://yourserver.com/api/qr", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    qr_link: decoded,
+                    init_data: tg.initData  // подписанные данные от Telegram
+                })
+            });
+
             tg.close();
         }
 
