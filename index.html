@@ -15,48 +15,110 @@
             height: 100vh;
         }
 
-        #reader {
-            width: 100vw;
-            height: 100vh;
-        }
-
-        /* Убираем стандартные элементы библиотеки */
-        #reader__scan_region {
-            min-height: 100vh !important;
-        }
-        #reader__scan_region video {
-            width: 100vw !important;
-            height: 100vh !important;
-            object-fit: cover !important;
-        }
-        #reader__scan_region img {
-            display: none !important;
-        }
-        #reader__dashboard {
-            display: none !important;
-        }
-        #reader__header_message {
-            display: none !important;
-        }
-
-        /* Затемнение с вырезом */
-        .overlay {
+        .top-bar {
             position: fixed;
             top: 0;
             left: 0;
+            right: 0;
+            z-index: 20;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .top-bar .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        .top-bar .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .top-bar .username {
+            color: #fff;
+            font-family: -apple-system, sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .top-bar .login-btn {
+            color: #fff;
+            font-family: -apple-system, sans-serif;
+            font-size: 14px;
+            background: #3390ec;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
+        }
+
+        #reader {
+            border: none !important;
             width: 100vw;
             height: 100vh;
+        }
+
+        #reader * {
+            border: none !important;
+        }
+
+        #reader video {
+            width: 100vw !important;
+            height: 100vh !important;
+            object-fit: cover !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+        }
+
+        #reader__scan_region {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            min-height: 100vh !important;
+        }
+
+        #reader__scan_region > div,
+        #reader__dashboard,
+        #reader__header_message,
+        #qr-shaded-region {
+            display: none !important;
+        }
+
+        .blur-top, .blur-bottom, .blur-left, .blur-right {
+            position: fixed;
             z-index: 10;
             pointer-events: none;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cdefs%3E%3Cmask id='hole'%3E%3Crect width='100%25' height='100%25' fill='white'/%3E%3Crect x='50%25' y='50%25' width='250' height='250' transform='translate(-125,-125)' rx='12' ry='12' fill='black'/%3E%3C/mask%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='white' mask='url(%23hole)'/%3E%3C/svg%3E");
-            -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cdefs%3E%3Cmask id='hole'%3E%3Crect width='100%25' height='100%25' fill='white'/%3E%3Crect x='50%25' y='50%25' width='250' height='250' transform='translate(-125,-125)' rx='12' ry='12' fill='black'/%3E%3C/mask%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='white' mask='url(%23hole)'/%3E%3C/svg%3E");
+            background: rgba(0,0,0,0.3);
         }
+
+        .blur-top { top: 0; left: 0; right: 0; height: calc(40vh - 125px); }
+        .blur-bottom { bottom: 0; left: 0; right: 0; height: calc(60vh - 125px); }
+        .blur-left { top: calc(40vh - 125px); left: 0; width: calc(50vw - 125px); height: 250px; }
+        .blur-right { top: calc(40vh - 125px); right: 0; width: calc(50vw - 125px); height: 250px; }
 
         .scan-frame {
             position: fixed;
-            top: 50%;
+            top: 40vh;
             left: 50%;
             transform: translate(-50%, -50%);
             width: 250px;
@@ -65,7 +127,6 @@
             pointer-events: none;
         }
 
-        /* Уголки рамки */
         .corner {
             position: absolute;
             width: 30px;
@@ -90,41 +151,20 @@
             opacity: 0.8;
             z-index: 12;
         }
-
-        /* Скрываем встроенную рамку библиотеки */
-        #reader__scan_region > div:last-child {
-            display: none !important;
-        }
-        #qr-shaded-region {
-            display: none !important;
-        }
-        /* Убираем border у внутренних элементов */
-        #reader {
-            border: none !important;
-        }
-        #reader video {
-            width: 100vw !important;
-            height: 100vh !important;
-            object-fit: cover !important;
-        }
     </style>
 </head>
 <body>
-    <div id="reader"></div>
-
-    <div class="overlay">
-        <defs>
-            <mask id="hole">
-                <rect width="100%" height="100%" fill="white"/>
-                <rect x="50%" y="50%" width="250" height="250"
-                      transform="translate(-125, -125)"
-                      rx="12" ry="12" fill="black"/>
-            </mask>
-        </defs>
-        <rect width="100%" height="100%" fill="rgba(0,0,0,0.6)" mask="url(#hole)"/>
+    <div class="top-bar" id="topBar">
+        <!-- Заполняется через JS -->
     </div>
 
-    <!-- Уголки -->
+    <div id="reader"></div>
+
+    <div class="blur-top"></div>
+    <div class="blur-bottom"></div>
+    <div class="blur-left"></div>
+    <div class="blur-right"></div>
+
     <div class="scan-frame">
         <div class="corner corner-tl"></div>
         <div class="corner corner-tr"></div>
@@ -137,28 +177,58 @@
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready();
-        tg.expand();
 
-        const scanner = new Html5Qrcode("reader");
-        scanner.start(
-            { facingMode: "environment" },
-            {
-                fps: 10,
-                qrbox: { width: 250, height: 250 },
-                disableFlip: false
-            },
-            onScanSuccess,
-            onScanFailure
-        );
+        const topBar = document.getElementById("topBar");
+
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            // Зашли через Telegram
+            const user = tg.initDataUnsafe.user;
+            const name = user.username ? `@${user.username}` : `${user.first_name}`;
+            const photoUrl = user.photo_url;
+
+            topBar.innerHTML = `
+                <div class="avatar">
+                    ${photoUrl ? `<img src="${photoUrl}" alt="">` : name.charAt(0).toUpperCase()}
+                </div>
+                <span class="username">${name}</span>
+            `;
+
+            tg.expand();
+            startScanner();
+        } else {
+            // Зашли через браузер — показываем кнопку логина
+            topBar.innerHTML = `
+                <span class="username" style="opacity:0.6;">Вы не авторизованы</span>
+                <button class="login-btn" id="loginBtn">Войти через Telegram</button>
+            `;
+
+            document.getElementById("loginBtn").addEventListener("click", () => {
+                // Telegram Login Widget redirect
+                window.location.href = "https://t.me/YOUR_BOT_USERNAME?start=login";
+            });
+
+            startScanner();
+        }
+
+        function startScanner() {
+            const scanner = new Html5Qrcode("reader");
+            scanner.start(
+                { facingMode: "environment" },
+                { fps: 10, disableFlip: false },
+                onScanSuccess,
+                onScanFailure
+            );
+        }
 
         function onScanSuccess(decoded) {
-            scanner.stop();
+            if (!tg.initDataUnsafe || !tg.initDataUnsafe.user) {
+                alert("Авторизуйтесь через Telegram для оплаты");
+                return;
+            }
             tg.sendData(JSON.stringify({ qr_link: decoded }));
         }
 
-        function onScanFailure(error) {
-            // тихо игнорим
-        }
+        function onScanFailure(error) {}
     </script>
 </body>
 </html>
