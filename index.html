@@ -152,6 +152,7 @@
         function onScanSuccess(decoded) {
             scanner.stop();
             tg.sendData(JSON.stringify({ qr_link: decoded }));
+            tg.close();
         }
 
         function onScanFailure(error) {
